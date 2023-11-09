@@ -1,0 +1,93 @@
+<%- include("templates/header.ejs") %>
+<div id="page-container">
+  <div id="content-wrap">
+<div class="container my-5">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3  shadow-lg">
+      <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+        <h1 class="display-4 fw-bold lh-1 text-body-emphasis">My personal Books Shell</h1>
+        <div >
+              <div class="container pt-2 ">
+                <a class="btn btn-danger " id="get" type="button" value="Submit" href="/" >Return to Search</a>
+              </div>
+
+        </div>
+      </div>
+      <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+          <img class="rounded-lg-3 rounded-top-4" src="https://images.saymedia-content.com/.image/t_share/MTk3NzM1NzIwMTY3Njc5Nzk0/calculate-the-capacity-of-a-bookshelf-or-bookcase.png" alt="" width="720">
+      </div>
+    </div>
+  </div>
+
+  <div class="album py-5 bd-color">
+    <div class="container">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3">
+
+      <% for(let item of listItems){%>
+        <div class="col " id="book<%= item.id %>">
+          <div class="card shadow-sm " style="border-color: #B0926A;">
+            <img src="https://covers.openlibrary.org/b/isbn/<%= item.cover %>-L.jpg" width="100%" height="225" alt="book cover">
+
+            <div class="card-body">
+              <p class="card-text"><%= item.title %> By <%= item.author %></p>
+              <p class="card-text">Reviews: </p>
+
+              <div id="dip<%=item.id%>" >
+                <form action="/edit-book" method="post">
+                  <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+                  <textarea name="bookReview" id="review<%=item.id%>" cols="50" rows="10" class="rounded-3" hidden><%= item.review %></textarea>
+                  <button id="done<%=item.id%>"  class="btn btn-success mb-5" type="submit" hidden onclick="hide('<%=item.id%>')">Save
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                  </svg></button>
+                </form>
+
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group gap-3">
+                  <form method="POST">
+                    <input type="hidden" name="title" value="<%= item.title %>">
+                    <input type="hidden" name="author" value="<%= item.author %>">
+                    <input type="hidden" name="cover" value="<%= item.cover %>">
+                    <input type="hidden" name="id" value="<%= item.id %>">
+
+                    <button type="submit" class="btn btn-sm btn-outline-secondary text-bg-primary" formaction="/delete-book">Delete</button>
+                  </form>
+                  <button type="submit" class="btn btn-sm btn-outline-secondary text-bg-primary" onclick="handler('<%=item.id%>')" id="onRead">Already Read</button>
+                  <button type="submit" class="btn btn-sm btn-outline-secondary text-bg-primary" onclick="review('<%=item.id%>')" id="bookReview">Review</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+    function handler(id) {
+      const element = document.getElementById("book" + id);
+      element.classList.toggle("read");
+    }
+
+    function review(id) {
+      document.getElementById("dip" + id).removeAttribute("hidden")
+      document.getElementById("review" + id).removeAttribute("hidden")
+      document.getElementById("done" + id).removeAttribute("hidden")
+    }
+
+    function hide(id) {
+      document.getElementById("dip" + id).setAttribute("hidden", true)
+
+      }
+      function show() {
+         document.getElementById('dip' + id).hidden = false
+      }
+
+
+</script>
+
+<%- include("templates/footer.ejs") %>

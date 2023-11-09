@@ -1,0 +1,68 @@
+<%- include("templates/header.ejs") %>
+ <div id="page-container">
+   <div id="content-wrap">
+
+    <div class="container my-5">
+        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3  shadow-lg">
+          <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+            <h1 class="display-4 fw-bold lh-1 text-body-emphasis">Search, Save all the books you want to read</h1>
+            <div >
+              <div class="container pt-2 row-cols-2 row-cols-sm-2 row-cols-md-3 pb-3">
+                <a class="btn btn-danger " id="get" type="button" value="Submit" href="/books-saved" >My list</a>
+              </div>
+                <form class="p-4 p-md-4  rounded-3 bg-form-color" method="get">
+                    <div class="mb-3">
+                      <label for="bookName" class="form-label fs-3">Search</label>
+                      <input type="text" class="form-control" name="bookName" id="bookName" >
+                    </div>
+                    <!-- <button onclick="window.location.href='/search'" class="btn btn-primary"></button> -->
+                    <input class="btn btn-danger" id="get" type="submit" value="Submit" formaction="/get-book">
+                  </form>
+
+
+            </div>
+          </div>
+          <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+              <img class="rounded-lg-3 rounded-top-4" src="https://images.saymedia-content.com/.image/t_share/MTk3NzM1NzIwMTY3Njc5Nzk0/calculate-the-capacity-of-a-bookshelf-or-bookcase.png" alt="" width="720">
+          </div>
+        </div>
+      </div>
+      <div class="album py-5 bd-color">
+        <div class="container">
+
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            <% if (locals.books) { %>
+              <% books.forEach(function(book) { %>
+                <div class="col" id="booked<%= book.title %>">
+                  <div class="card shadow-sm" style="border-color: #B0926A;">
+                    <img src="https://covers.openlibrary.org/b/isbn/<%= book.cover %>-L.jpg" loading="lazy" width="100%" height="225" alt="book cover">
+
+                    <div class="card-body">
+                      <p class="card-text"><%= book.title %> By <%= book.author %></p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                          <form method="POST" action="/save-book">
+                            <input type="hidden" name="title" value="<%= book.title %>">
+                            <input type="hidden" name="author" value="<%= book.author %>">
+                            <input type="hidden" name="cover" value="<%= book.cover %>">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary text-bg-primary" onclick="handler('<%=book.title%>')">Save</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% }); %>
+                <% } %>
+          </div>
+        </div>
+      </div>
+   </div>
+   <script>
+    function handler(title) {
+      const element = document.getElementById("booked" + title);
+      element.classList.toggle("read");
+    }
+   </script>
+
+   <%- include("templates/footer.ejs") %>
